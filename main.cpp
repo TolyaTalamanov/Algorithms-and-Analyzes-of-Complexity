@@ -9,6 +9,10 @@
 
 using namespace std;
 
+using Time = std::chrono::high_resolution_clock;
+using ms   = std::chrono::milliseconds;
+using fms  = std::chrono::duration<float, milli>;
+
 template<typename Iterator, typename Predicate>
 void insert_sort(Iterator first, Iterator last, Predicate p){
     for(auto i = first; i != last; ++i){
@@ -24,24 +28,29 @@ void insert_sort(Iterator first, Iterator last){
 template< class Iterator >
 void bucket_sort(Iterator first, Iterator last){
     const long long n = distance(first, last);
-    vector<double> buckets[n];
+    //vector<double> buckets[n];
+    vector<double> *buckets[n];
+    for ( int i = 0; i < n; i++ )
+        buckets[i] = new vector<double>;
+
     long index;
 
     Iterator it = first;
 
     while(it != last){
         index = n * (*it);
-        buckets[index].push_back(*it);
+        buckets[index]->push_back(*it);
         it++;
     }
 
     for(auto& bucket : buckets){
-        insert_sort(bucket.begin(), bucket.end());
+        insert_sort(bucket->begin(), bucket->end());
     }
     it = first;
     for(long long i = 0 ; i < n; i++){
-        for(long long j = 0 ; j < buckets[i].size(); j++){
-            *it++ = buckets[i][j];
+        for(long long j = 0 ; j < buckets[i]->size(); j++){
+            *it++ = buckets[i]->back();
+            buckets[i]->pop_back();
         }
     }
 
@@ -50,12 +59,12 @@ void bucket_sort(Iterator first, Iterator last){
 int main(int argc, char** argv) {
     long long size;
     int seed;
-    if(argc > 1) {
+    if(argc > 2) {
         size     = atoi(argv[1]);
         int seed = atoi(argv[2]);
     }
     else
-        cerr << "Enter size" << endl;
+        cerr << "Enter size and seed" << endl;
 
     mt19937 generator(seed);
     uniform_real_distribution<double> distribution(0, 1);
@@ -64,14 +73,12 @@ int main(int argc, char** argv) {
         return distribution(generator);
     });
 
-    //copy(data.begin(), data.end(), ostream_iterator<double>(cout, " "));
-    auto start = std::chrono::steady_clock::now();
-    //bucket_sort(data.begin(), data.end());
-    sort(data.begin(), data.end());
-    auto end = std::chrono::steady_clock::now();
+    auto start = Time::now();
+    bucket_sort(data.begin(), data.end());
+    auto end   = Time::now();
 
-    long long time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    cout << time << "ms" <<endl;
+    fms time = end - start;
+    cout << time.count() << endl;
 
     return 0;
 }
