@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.4)
+add_definitions(-Wall -O3)
 set(LIBRARY SortsLib)
 project(${LIBRARY})
 set(CMAKE_CXX_STANDARD 14)
