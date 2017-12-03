@@ -21,13 +21,13 @@ while(i <= upper_bound):
 Y_B = []
 Y_Q = []
 
-f_b = open('log.txt', 'r')
+f_b = open('log_bucket_sort.txt', 'r')
 for line in f_b:
 	Y_B.append(float(line))
 
 f_b.close()
 
-f_q = open('log-quick-sort.txt', 'r')
+f_q = open('log_std_sort.txt', 'r')
 for line in f_q:
 	Y_Q.append(float(line))
 
