@@ -4,9 +4,7 @@
 #include <algorithm>
 #include <queue>
 #include <chrono>
-#include <array>
-#include <list>
-
+#include <iterator>
 using namespace std;
 
 using Time = std::chrono::high_resolution_clock;
@@ -28,10 +26,11 @@ void insert_sort(Iterator first, Iterator last){
 template< class Iterator >
 void bucket_sort(Iterator first, Iterator last){
     const long long n = distance(first, last);
-    //vector<double> buckets[n];
     vector<double> *buckets[n];
+    std::cout << "size = " << n << '\n';
+
     for ( int i = 0; i < n; i++ )
-        buckets[i] = new vector<double>;
+        buckets[i] = new vector<double>();
 
     long index;
 
@@ -39,21 +38,32 @@ void bucket_sort(Iterator first, Iterator last){
 
     while(it != last){
         index = n * (*it);
+        std::cout << "buckets[ " << index << " ] = " << *it << '\n';
         buckets[index]->push_back(*it);
         it++;
     }
 
     for(auto& bucket : buckets){
-        insert_sort(bucket->begin(), bucket->end());
-    }
-    it = first;
-    for(long long i = 0 ; i < n; i++){
-        for(long long j = 0 ; j < buckets[i]->size(); j++){
-            *it++ = buckets[i]->back();
-            buckets[i]->pop_back();
-        }
+      // insert_sor(bucket->begin(), bucket->end());
+      std::cout << "before sort : " << '\n';
+      copy(bucket->begin(), bucket->end(), ostream_iterator<double>(cout, " " ));
+      sort(bucket->begin(), bucket->end());
+      std::cout << "" << '\n';
+      std::cout << "after sort : " << '\n';
+      copy(bucket->begin(), bucket->end(), ostream_iterator<double>(cout, " " ));
+      std::cout << "" << '\n';
     }
 
+    it = first;
+    
+    for(auto& bucket : buckets){
+        for(long long i = 0; i < bucket->size(); ++i){
+            *it = (*bucket)[i];
+            ++it;
+        }
+    }
+    for ( int i = 0; i < n; i++ )
+        delete buckets[i];
 }
 
 int main(int argc, char** argv) {
@@ -69,16 +79,21 @@ int main(int argc, char** argv) {
     mt19937 generator(seed);
     uniform_real_distribution<double> distribution(0, 1);
     vector<double> data(size);
+
     generate(data.begin(), data.end(), [&distribution, &generator](){
         return distribution(generator);
     });
+    std::cout << "array : " << '\n';
+    copy(data.begin(), data.end(), ostream_iterator<double>(cout, " "));
 
     auto start = Time::now();
     bucket_sort(data.begin(), data.end());
     auto end   = Time::now();
 
     fms time = end - start;
-    cout << time.count() << endl;
+    std::cout << "\nsorted array : " << '\n';
+    copy(data.begin(), data.end(), ostream_iterator<double>(cout, " "));
+    cout << "" << '\n';
 
     return 0;
 }
