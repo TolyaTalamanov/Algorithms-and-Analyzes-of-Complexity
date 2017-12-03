@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.4)
-project(Sorts)
-
+set(LIBRARY SortsLib)
+project(${LIBRARY})
 set(CMAKE_CXX_STANDARD 14)
-
-set(SOURCE_FILES main.cpp)
-add_executable(Sorts ${SOURCE_FILES})
+set(INCLUDE include/sorts.h)
+set(SOURCE  src/sorts.cpp)
+include_directories("include")
+add_library(${CMAKE_PROJECT_NAME} STATIC ${INCLUDE} ${SOURCE})
+add_subdirectory(sample)

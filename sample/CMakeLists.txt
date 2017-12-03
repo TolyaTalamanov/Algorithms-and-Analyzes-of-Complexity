@@ -1,0 +1,6 @@
+file(GLOB app_list RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" *.cpp)
+foreach(app_filename ${app_list})
+    get_filename_component(app ${app_filename} NAME_WE)
+    add_executable(${app} ${app_filename})
+    target_link_libraries(${app} ${LIBRARY})
+endforeach()
