@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 
 def one_experiment(N):
-    exe = "../cmake-build-debug/sample/bucket_sort "
+    exe = "../cmake-build-debug/sample/opt_bucket_sort "
     comand = exe + str(N) +" " + str(1)
     proc = Popen(comand, shell=True, stdout=PIPE, stderr=PIPE)
     proc.wait()
@@ -24,7 +24,7 @@ def write_log(step):
     lower_bound = 1
     upper_bound = 1000000
     i = lower_bound
-    f = open('log_bucket_sort.txt', 'w')
+    f = open('log_opt_bucket_sort.txt', 'w')
     while(i <= upper_bound):
         avg_time = float(serial_experiment(i, 10))
         f.write(str(avg_time) + "\n")

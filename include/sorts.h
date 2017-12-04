@@ -251,7 +251,17 @@ void bucket_sort(Iterator first, Iterator last){
 template< class Iterator >
 void opt_bucket_sort(Iterator first, Iterator last){
     const int n = distance(first, last);
-    const int counts_bucket = n / 20;
+    double scale;
+    if(n <= 1)
+        scale = 1;
+    else if(n > 2 && n <= 1000)
+        scale = 0.5;
+    else if(n > 1000 && n <= 100000)
+         scale = 0.25;
+    else
+        scale = 0.05;
+
+    const int counts_bucket = n * scale;//sqrt(n);
     vector<double> buckets(n);
     vector<int>    sizes (counts_bucket);
     vector<int>    shifts(counts_bucket);
