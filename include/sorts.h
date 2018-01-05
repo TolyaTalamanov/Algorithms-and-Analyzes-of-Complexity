@@ -302,7 +302,7 @@ void opt_bucket_sort(Iterator first, Iterator last){
 ////            copy(first + current_position, first +
 //                                current_position + sizes[i] - 1,
 //                                 ostream_iterator<double>(cout, " "));
-            insert_sort(buckets.begin() + start, buckets.begin() + end);
+            std::sort(buckets.begin() + start, buckets.begin() + end);
             current_position = shifts[i];
 
         }

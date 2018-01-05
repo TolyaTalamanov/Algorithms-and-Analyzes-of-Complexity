@@ -15,20 +15,29 @@ int main(int argc, char** argv) {
         cerr << "Enter size and seed" << endl;
 
     mt19937 generator(seed);
-    uniform_real_distribution<double> distribution(0, 1);
     vector<double> data(size);
+    if(!argv[3]){
+        std::cout << "Enter distribution" << '\n';
+        exit(-1);
+    }
+    if(string(argv[3])  == "g"){
+        normal_distribution<> distribution(0.5, 0.2);
+        generate(data.begin(), data.end(), [&distribution, &generator](){
+            return distribution(generator);
+        });
+    }
 
-    generate(data.begin(), data.end(), [&distribution, &generator](){
-        return distribution(generator);
-    });
-
-//    cout << "before sort : " << endl;
-//    copy(data.begin(), data.end(), ostream_iterator<double>(cout, " "));
+    if(string(argv[3])  == "u"){
+        uniform_real_distribution<double> distribution(0, 1);
+        generate(data.begin(), data.end(), [&distribution, &generator](){
+            return distribution(generator);
+        });
+    }
+    // cout << "before sort : " << endl;
+    // copy(data.begin(), data.end(), ostream_iterator<double>(cout, " "));
     auto start = Time::now();
     bucket_sort(data.begin(), data.end());
     auto end   = Time::now();
-//    cout << "\n\nafter sort : " << endl;
-//    copy(data.begin(), data.end(), ostream_iterator<double>(cout, " "));
     fms time = end - start;
     cout << time.count() << '\n';
     return 0;

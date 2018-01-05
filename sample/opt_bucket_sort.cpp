@@ -2,7 +2,6 @@
 #include <vector>
 #include <random>
 #include "sorts.h"
-#include <omp.h>
 using namespace std;
 
 int main(int argc, char** argv) {
@@ -23,13 +22,9 @@ int main(int argc, char** argv) {
         return distribution(generator);
     });
 
-//    cout << "before sort : " << endl;
-//    copy(data.begin(), data.end(), ostream_iterator<double>(cout, " "));
     auto start = Time::now();
     opt_bucket_sort(data.begin(), data.end());
     auto end   = Time::now();
-//    cout << "\n\nafter sort : " << endl;
-//    copy(data.begin(), data.end(), ostream_iterator<double>(cout, " "));
     fms time = end - start;
     cout << time.count() << '\n';
 
