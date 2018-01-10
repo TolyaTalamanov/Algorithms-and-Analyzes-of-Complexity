@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <unordered_set>
 #include <random>
 #include "sorts.h"
 using namespace std;
@@ -19,7 +20,7 @@ int main(int argc, char** argv) {
     if(argv[3] != nullptr){
         if(string(argv[3]) == "g"){
             std::cout << "gauss" << '\n';
-            normal_distribution<> distribution(0.5, 0.3);
+            normal_distribution<> distribution(0.5, 0.5);
             generate(data.begin(), data.end(), [&distribution, &generator](){
                 double randVal;
                 do{
@@ -28,24 +29,27 @@ int main(int argc, char** argv) {
                 return randVal;
             });
         }
-        else{
+        else if(string(argv[3]) == "u"){
             std::cout << "uniform" << '\n';
             uniform_real_distribution<double> distribution(0, 1);
             generate(data.begin(), data.end(), [&distribution, &generator](){
                 return distribution(generator);
             });
         }
+        else{
+            std::cout << "not found this distribution!!!" << '\n';
+            std::cout << "choose: " << '\n';
+            std::cout << "g - gaussian\nu - uniform" << '\n';
+            exit(-1);
+        }
     }
     else{
         std::cout << "enter disribution" << '\n';
     }
-    std::cout << "size array = " << data.size() << '\n';
     auto start = Time::now();
     opt_bucket_sort(data.begin(), data.end());
     auto end   = Time::now();
-    // copy(data.begin(), data.end(), ostream_iterator<double>(cout, " "));
     fms time = end - start;
     cout << time.count() << '\n';
-
     return 0;
 }
